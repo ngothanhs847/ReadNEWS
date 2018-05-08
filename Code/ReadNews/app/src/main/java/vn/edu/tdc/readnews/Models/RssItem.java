@@ -1,8 +1,5 @@
 package vn.edu.tdc.readnews.Models;
 
-/**
- * Created by NGUYEN DUC LINH on 25/03/2016.
- */
 public class RssItem {
     private String title;
     private String description;
@@ -18,8 +15,7 @@ public class RssItem {
 
         this.title = title;
     }
-    public String getTitel(){
-
+    public String getTitle(){
         return title;
     }
     public void setDescription(String description){

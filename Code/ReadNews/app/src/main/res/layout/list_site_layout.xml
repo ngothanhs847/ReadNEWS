@@ -6,4 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".ListSiteActivity">
 
+    <GridView
+        android:id="@+id/gvList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="3"></GridView>
+
 </android.support.constraint.ConstraintLayout>
