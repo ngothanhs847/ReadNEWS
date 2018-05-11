@@ -27,7 +27,6 @@
             android:layout_height="wrap_content"
             android:text="Title"
             android:textColor="#375483"
-            android:fontFamily="@font/arial"
             android:textSize="16sp"/>
 
         <TextView

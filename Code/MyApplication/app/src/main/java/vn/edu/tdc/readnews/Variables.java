@@ -137,24 +137,24 @@ public class Variables {
     // tuoi tre
     public static final String[] TUOITRE_CATEGORIES = {
             "Trang Chủ", "Thế Giới", "Kinh Tế", "Giáo Dục",
-            "Văn Hóa - Giải Trí", "Nhịp Sống Số", "Du Lịch", "Chính Trị - Xã Hội",
+            "Giải Trí", "Nhịp Sống Số", "Du Lịch", "Thời Sự",
             "Pháp Luật", "Sống Khỏe", "Thế Thao", "Nhịp Sống Trẻ",
             "Bạn Đọc"
     };
     public static final String[] TUOITRE_LINKS = {
-            "http://tuoitre.vn/rss/tt-tin-moi-nhat.rss",
-            "http://tuoitre.vn/rss/tt-the-gioi.rss",
-            "http://tuoitre.vn/rss/tt-kinh-te.rss",
-            "http://tuoitre.vn/rss/tt-giao-duc.rss",
-            "http://tuoitre.vn/rss/tt-van-hoa-giai-tri.rss",
-            "http://tuoitre.vn/rss/tt-nhip-song-so.rss",
-            "http://tuoitre.vn/rss/tt-du-lich.rss",
-            "http://tuoitre.vn/rss/tt-chinh-tri-xa-hoi.rss",
-            "http://tuoitre.vn/rss/tt-phap-luat.rss",
-            "http://tuoitre.vn/rss/tt-song-khoe.rss",
-            "http://tuoitre.vn/rss/tt-the-thao.rss",
-            "http://tuoitre.vn/rss/tt-nhip-song-tre.rss",
-            "http://tuoitre.vn/rss/tt-ban-doc.rss"
+            "http://tuoitre.vn/rss/tin-moi-nhat.rss",
+            "http://tuoitre.vn/rss/the-gioi.rss",
+            "http://tuoitre.vn/rss/kinh-doanh.rss",
+            "http://tuoitre.vn/rss/giao-duc.rss",
+            "http://tuoitre.vn/rss/thu-gian.rss",
+            "http://tuoitre.vn/rss/nhip-song-so.rss",
+            "http://tuoitre.vn/rss/du-lich.rss",
+            "http://tuoitre.vn/rss/thoi-su.rss",
+            "http://tuoitre.vn/rss/phap-luat.rss",
+            "http://tuoitre.vn/rss/suc-khoe.rss",
+            "http://tuoitre.vn/rss/the-thao.rss",
+            "http://tuoitre.vn/rss/nhip-song-tre.rss",
+            "http://tuoitre.vn/rss/ban-doc-lam-bao.rss"
     };
 
     public static final int[] ICONS_ITEM_TUOITRE = {
@@ -187,6 +187,13 @@ public class Variables {
             "http://nld.com.vn/cong-nghe-thong-tin.rss",
             "http://nld.com.vn/thoi-trang-lam-dep.rss",
             "http://nld.com.vn/thu-gian.rss"
+    };
+
+    public static final int[] ICONS_ITEM_NLD = {
+            R.drawable.icon_tin_noi_bat, R.drawable.icon_thoi_su, R.drawable.icon_the_gioi, R.drawable.icon_thi_truong,
+            R.drawable.icon_giao_duc, R.drawable.icon_phap_luat, R.drawable.icon_giai_tri, R.drawable.icon_the_thao,
+            R.drawable.icon_suc_khoe, R.drawable.icon_tinh_yeu, R.drawable.icon_ban_doc, R.drawable.icon_so_hoa,
+            R.drawable.icon_thoi_trang, R.drawable.icon_cuoi
     };
 
     //thanh nien
@@ -227,27 +234,57 @@ public class Variables {
 
 
 
-    public static final int[] ICONS_ITEM_NLD = {
-            R.drawable.icon_tin_noi_bat, R.drawable.icon_thoi_su, R.drawable.icon_the_gioi, R.drawable.icon_thi_truong,
-            R.drawable.icon_giao_duc, R.drawable.icon_phap_luat, R.drawable.icon_giai_tri, R.drawable.icon_the_thao,
-            R.drawable.icon_suc_khoe, R.drawable.icon_tinh_yeu, R.drawable.icon_ban_doc, R.drawable.icon_so_hoa,
-            R.drawable.icon_thoi_trang, R.drawable.icon_cuoi
+    //tien phong
+
+    public static final String[] TP_CATEGORIES = {
+            "Xã Hội", "Kinh Tế", "Địa Ốc", "Thế Giới", "Giới Trẻ",
+            "Xe", "Pháp Luật", "Thể Thao", "Giải Trí",
+            "Giáo Dục", "Công Nghệ", "Tuyển Sinh", "Học Sinh - Sinh Viên",
+            "Gia Đình", "Hoa Hậu", "Tin 99s", "Bạn Đọc"
     };
+
+    public static final String[] TP_LINKS = {
+            "https://www.tienphong.vn/rss/xa-hoi-2.rss",
+            "https://www.tienphong.vn/rss/kinh-te-3.rss",
+            "https://www.tienphong.vn/rss/dia-oc-166.rss",
+            "https://www.tienphong.vn/rss/the-gioi-5.rss",
+            "https://www.tienphong.vn/rss/gioi-tre-4.rss",
+            "https://www.tienphong.vn/rss/xe-113.rss",
+            "https://www.tienphong.vn/rss/phap-luat-12.rss",
+            "https://www.tienphong.vn/rss/the-thao-11.rss",
+            "https://www.tienphong.vn/rss/giai-tri-36.rss",
+            "https://www.tienphong.vn/rss/giao-duc-71.rss",
+            "https://www.tienphong.vn/rss/cong-nghe-45.rss",
+            "https://www.tienphong.vn/rss/tuyen-sinh-155.rss",
+            "https://www.tienphong.vn/rss/hoc-sinh-sinh-vien-186.rss",
+            "https://www.tienphong.vn/rss/gia-dinh-suc-khoe-210.rss",
+            "https://www.tienphong.vn/rss/hoa-hau-253.rss",
+            "https://www.tienphong.vn/rss/tin-99s-236.rss",
+            "https://www.tienphong.vn/rss/ban-doc-15.rss"
+    };
+
+    public static final int[] ICONS_ITEM_TP = {
+            R.drawable.icon_trang_chu, R.drawable.icon_thi_truong, R.drawable.icon_bat_dong_san, R.drawable.icon_the_gioi,
+            R.drawable.icon_so_hoa, R.drawable.icon_xe, R.drawable.icon_phap_luat, R.drawable.icon_the_thao,
+            R.drawable.icon_giai_tri, R.drawable.icon_giao_duc, R.drawable.icon_cong_nghe, R.drawable.icon_about, R.drawable.icon_chinh_tri,
+            R.drawable.icon_gia_dinh, R.drawable.icon_cong_dong, R.drawable.icon_tin_noi_bat, R.drawable.icon_ban_doc,
+            };
+
 
 
 
     // All
     public static final String[][] CATEGORIES = {
             VNEXPRESS_CATEGORIES, DANTRI_CATEGORIES,
-            TUOITRE_CATEGORIES, NLD_CATEGORIES,H24_CATEGORISES,TN_CATEGORIES
+            TUOITRE_CATEGORIES, NLD_CATEGORIES,H24_CATEGORISES,TN_CATEGORIES, VNNET_CATEGORIES, TP_CATEGORIES
     };
     public static final String[][] LINKS = {
             VNEXPRESS_LINKS, DANTRI_LINKS,
-            TUOITRE_LINKS,NLD_LINKS ,H24_LINKS, TN_LINKS
+            TUOITRE_LINKS, NLD_LINKS ,H24_LINKS, TN_LINKS, VNNET_LINKS, TP_LINKS
     };
     public static final int[][] ICON_ITEM = {
             ICONS_ITEM_VNE, ICONS_ITEM_DANTRI,
-            ICONS_ITEM_TUOITRE,ICONS_ITEM_NLD,ICONS_ITEM_24H, ICONS_ITEM_TN
+            ICONS_ITEM_TUOITRE, ICONS_ITEM_NLD, ICONS_ITEM_24H, ICONS_ITEM_TN, ICONS_ITEM_VNNET, ICONS_ITEM_TP
     };
     //
     public static final String PAPER = "paper";

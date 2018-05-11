@@ -1,23 +1,34 @@
 package vn.edu.tdc.readnews;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -35,7 +46,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.SimpleDateFormat;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -55,7 +67,9 @@ public class ListNewsActivity extends AppCompatActivity {
     private ProgressDialog dialog;
 
     private SlidingMenuAdapter adapter;
-    public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private ShareDialog shareDialog;
+    private ShareLinkContent shareLinkContent;
+    //private CallbackManager callbackManager;
 
     List<RssItem> listItemRss = new ArrayList<RssItem>();
     //ArrayList<ItemSlideMenu> ListWeb;
@@ -69,23 +83,16 @@ public class ListNewsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.list_news_layout);
 
         //anh xa
         AnhXa();
-
-        //setup data
-//        ListWeb = new ArrayList<>();
-//
-//        for (int i = 0; i < Variables.PAPERS.length; i++) {
-//            ListWeb.add(new ItemSlideMenu(Variables.ICONS[i], Variables.PAPERS[i]));
-//        }
+        shareDialog = new ShareDialog(ListNewsActivity.this);
+        //callbackManager = CallbackManager.Factory.create();
 
         intent = getIntent();
         paper = intent.getIntExtra("data", 0);
-        //Toast.makeText(ListNewsActivity.this, paper + "---", Toast.LENGTH_SHORT).show();
-
-
 
         ConnectivityManager cm =
                 (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -104,10 +111,6 @@ public class ListNewsActivity extends AppCompatActivity {
                 }
             });
 
-
-//            adapter = new SlidingMenuAdapter(this, listItemSlideMenu);
-//            listViewSliding.setAdapter(adapter);
-//
             ListCategory = new ArrayList<>();
             for (int i = 0; i < Variables.CATEGORIES[paper].length; i++) {
                 ListCategory.add(new ItemSlideMenu(Variables.ICON_ITEM[paper][i], Variables.CATEGORIES[paper][i]));
@@ -127,36 +130,6 @@ public class ListNewsActivity extends AppCompatActivity {
 
             // close menu
             drawerLayout.closeDrawer(lvCategory);
-
-            //replaceFragment(0);
-//            listViewSliding.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-//
-//                    //setTitle(listItemSlideMenu.get(position).getTitle());
-//                    listViewSliding.setItemChecked(position, true);
-//                    paper = position;
-//
-//                    listItemDanhMuc = new ArrayList<>();
-//                    for (int i = 0; i < Variables.CATEGORIES[position].length; i++) {
-//                        listItemDanhMuc.add(new ItemSlideMenu(Variables.ICON_ITEM[position][i], Variables.CATEGORIES[position][i]));
-//                    }
-//                    adapterDanhMuc = new SlidingMenuAdapter(ListRssActivity.this, listItemDanhMuc);
-//                    listChiTietWeb.setAdapter(adapterDanhMuc);
-//
-//                    listTrangWeb.setAdapter(null);
-//                    //dialog = ProgressDialog.show(ListNewsActivity.this, "", "Loading " + Variables.CATEGORIES[position][0] + "...");
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            //new ReadXML(position).execute(Variables.LINKS[position][0]);
-//                        }
-//                    });
-//                    listTrangWeb.clearTextFilter();
-//                    drawerLayout.closeDrawer(listViewSliding);
-//
-//                }
-//            });
 
             lvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -224,16 +197,85 @@ public class ListNewsActivity extends AppCompatActivity {
             }
         };
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
+
+        registerForContextMenu(lvNews);
     }
 
+    //result
+//    @Override
+////    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+////        super.onActivityResult(requestCode, resultCode, data);
+////        callbackManager.onActivityResult(requestCode, resultCode, data);
+////    }
+
+
+    //context menu
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.news_menu, menu);
+        //menu.add(0, R.id.share, 0, "Share News With Facebook");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+
+        if (ShareDialog.canShow(ShareLinkContent.class))
+        {
+            shareLinkContent = new ShareLinkContent.Builder()
+                    .setContentUrl(Uri.parse(listItemRss.get(adapterContextMenuInfo.position).getLink()))
+                    .build();
+            shareDialog.show(shareLinkContent, ShareDialog.Mode.NATIVE);
+        }
+
+        return true;
+    }
+
+
+    //lay key cua facebook
+    public static String printKeyHash(Activity context) {
+        PackageInfo packageInfo;
+        String key = null;
+        try {
+            //getting application package name, as defined in manifest
+            String packageName = context.getApplicationContext().getPackageName();
+
+            //Retriving package info
+            packageInfo = context.getPackageManager().getPackageInfo(packageName,
+                    PackageManager.GET_SIGNATURES);
+
+            Log.e("Package Name=", context.getApplicationContext().getPackageName());
+
+            for (android.content.pm.Signature signature : packageInfo.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                key = new String(Base64.encode(md.digest(), 0));
+
+                // String key = new String(Base64.encodeBytes(md.digest()));
+                Log.e("Key Hash=", key);
+            }
+        } catch (PackageManager.NameNotFoundException e1) {
+            Log.e("Name not found", e1.toString());
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("No such an algorithm", e.toString());
+        } catch (Exception e) {
+            Log.e("Exception", e.toString());
+        }
+
+        return key;
+    }
+
+    // anh xa
     public void AnhXa() {
         lvCategory = (ListView) findViewById(R.id.lv_left);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         lvNews = (ListView) findViewById(R.id.listNew);
-
         lvCategory.setTag(1);
     }
 
+    //class doc xml
     public class ReadXML extends AsyncTask<String, Integer, String> {
         private int paper;
 
@@ -245,11 +287,11 @@ public class ListNewsActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             String kq = "";
-            if (paper < 6) {
+            if (paper != 6) {
                 kq = getXmlFromUrlNomal(params[0]);
             } else {
-                kq = getXmlFromUrl(params[0]);
-            }
+               kq = getXmlFromUrl(params[0]);
+           }
             return kq;
         }
 
@@ -276,33 +318,27 @@ public class ListNewsActivity extends AppCompatActivity {
                 NodeList pubDateNode = e.getElementsByTagName("pubDate");
                 Element pubDateElement = (Element) pubDateNode.item(0);
                 String date = pubDateElement.getFirstChild().getNodeValue();
-
-//                Date d = null;
-//                try {
-//                    d = simpleDateFormat.parse(date);
-//                } catch (ParseException e1) {
-//                    //e1.printStackTrace();
-//                }
-//                String tg = simpleDateFormat.format(d);
                 item.setDate(date);
 
-                NodeList node = doc.getElementsByTagName("description");
-                Element desElment = (Element) node.item(0);
-                //kq = setDescription(desElment.getFirstChild().getNodeValue());
-                //item.setDescription(kq);
-
-                Pattern p = Pattern.compile("<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>");
-                String cdata = node.item(i + 1).getTextContent();
-                Matcher matcher = p.matcher(cdata);
-                if(matcher.find())
-                {
-                    item.setDescription(matcher.group(1));
+                if(paper == 2 ) {
+                    NodeList node = e.getElementsByTagName("description");
+                    Element desElment = (Element) node.item(0);
+                    kq = setDescription(desElment.getFirstChild().getNodeValue());
+                    item.setDescription(kq);
+                }
+                else {
+                    NodeList node = doc.getElementsByTagName("description");
+                    Pattern p = Pattern.compile("<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>");
+                    String cdata = node.item(i + 1).getTextContent();
+                    Matcher matcher = p.matcher(cdata);
+                    if (matcher.find()) {
+                        item.setDescription(matcher.group(1));
+                    }
                 }
 
                 itemList.add(item);
             }
 
-             //Toast.makeText(ListNewsActivity.this,""+itemList.get(0).getDescription(),Toast.LENGTH_LONG).show();
             if (dialog != null) {
                 dialog.dismiss();
             }
@@ -312,18 +348,21 @@ public class ListNewsActivity extends AppCompatActivity {
         }
     }
 
+    //lay anh tu xml
     public String setDescription(String description) {
         String img = "";
 
-
-
-
         //parse description for any image or video links
         if (description.contains("<img ")) {
+
             img = description.substring(description.indexOf("<img "));
+
             String cleanUp = img.substring(0, img.indexOf(">") + 1);
+
             img = img.substring(img.indexOf("src=") + 5);
+
             int indexOf = img.indexOf("'");
+
             if (indexOf == -1) {
                 indexOf = img.indexOf("\"");
             }
@@ -332,20 +371,29 @@ public class ListNewsActivity extends AppCompatActivity {
         return img;
     }
 
+    //lay xml tu url
     private static String getXmlFromUrl(String link) {
+
         StringBuilder content = new StringBuilder();
-        try {
+        try    {
+            // create a url object
             URL url = new URL(link);
 
+            // create a urlconnection object
             URLConnection urlConnection = url.openConnection();
+
+            // wrap the urlconnection in a bufferedreader
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 
             String line;
-            while ((line = bufferedReader.readLine()) != null) {
+
+            // read from the urlconnection via the bufferedreader
+            while ((line = bufferedReader.readLine()) != null){
                 content.append(line + "\n");
             }
             bufferedReader.close();
-        } catch (Exception e) {
+        }
+        catch(Exception e)    {
             e.printStackTrace();
         }
         return content.toString();
@@ -353,14 +401,17 @@ public class ListNewsActivity extends AppCompatActivity {
 
     public String getXmlFromUrlNomal(String url) {
         String xml = null;
-
+        //Log.d("u", url + "  ....");
         try {
             // defaultHttpClient
             DefaultHttpClient httpClient = new DefaultHttpClient();
+
             HttpPost httpPost = new HttpPost(url);
 
             HttpResponse httpResponse = httpClient.execute(httpPost);
+
             HttpEntity httpEntity = httpResponse.getEntity();
+
             xml = EntityUtils.toString(httpEntity);
 
         } catch (UnsupportedEncodingException e) {
@@ -370,9 +421,11 @@ public class ListNewsActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return xml;
     }
 
+    //option menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
@@ -384,6 +437,7 @@ public class ListNewsActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

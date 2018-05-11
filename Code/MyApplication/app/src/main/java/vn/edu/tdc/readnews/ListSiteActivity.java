@@ -1,19 +1,12 @@
 package vn.edu.tdc.readnews;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import vn.edu.tdc.readnews.Adapters.PaperAdapter;
@@ -48,26 +41,6 @@ public class ListSiteActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        try {
-            PackageInfo info = null;
-            try {
-                info = getPackageManager().getPackageInfo(
-                        "vn.edu.tdc.readnews",
-                        PackageManager.GET_SIGNATURES);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-            if(info != null) {
-                for (Signature signature : info.signatures) {
-                    MessageDigest md = MessageDigest.getInstance("SHA");
-                    md.update(signature.toByteArray());
-                    Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-                }
-            }
-        } catch (NoSuchAlgorithmException e) {
-
-        }
     }
 
     private void takeData()
@@ -96,11 +69,21 @@ public class ListSiteActivity extends AppCompatActivity {
         website6.setImage(R.drawable.thanh_nien);
         website6.setName("Thanh Niên");
 
+        Website website7 = new Website();
+        website7.setImage(R.drawable.viet_nam_vn);
+        website7.setName("Việt Nam Net");
+
+        Website website8 = new Website();
+        website8.setImage(R.drawable.tien_phong_logo);
+        website8.setName("Tiền Phong");
+
         list.add(website4);
         list.add(website3);
         list.add(website2);
         list.add(website5);
         list.add(website);
         list.add(website6);
+        list.add(website7);
+        list.add(website8);
     }
 }

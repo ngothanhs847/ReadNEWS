@@ -15,7 +15,6 @@ import java.io.StringReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 public class XMLDOMParser {
     public Document getDocument(String xml)
     {
@@ -24,7 +23,9 @@ public class XMLDOMParser {
         try{
             DocumentBuilder db = factory.newDocumentBuilder();
             InputSource is = new InputSource();
+            //Log.d("x", xml + "         ..........");
             is.setCharacterStream(new StringReader(xml));
+
             is.setEncoding("UTF-8");
             document = db.parse(is);
         }catch(ParserConfigurationException e)
