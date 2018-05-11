@@ -1,10 +1,7 @@
 package vn.edu.tdc.readnews;
 
-import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.GridView;
 
 import java.util.ArrayList;
@@ -25,6 +22,6 @@ public class ListSiteActivity extends AppCompatActivity {
 
         gvList = (GridView) findViewById(R.id.gvList);
 
-        adapter = new PaperAdapter(ListSiteActivity.this, list);
+        //adapter = new PaperAdapter(ListSiteActivity.this, list);
     }
 }
