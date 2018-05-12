@@ -30,7 +30,8 @@ public class NewsActivity extends AppCompatActivity {
         webView.getSettings().setUseWideViewPort(true);
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         webView.setScrollbarFadingEnabled(false);
-
+        webView.setWebViewClient(new NeroWebView());
+        //webView.getSettings().setJavaScriptEnabled(true);
         WebSettings webSettings = webView.getSettings();
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
