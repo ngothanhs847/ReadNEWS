@@ -1,9 +1,10 @@
+//noinspection GradleCompatible
 apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "tdc.edu.vn.myapplication"
+        applicationId "tdc.edu.vn.readnews"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
