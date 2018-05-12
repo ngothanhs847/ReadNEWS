@@ -1,13 +1,13 @@
 package vn.edu.tdc.readnews;
 
 public class Variables {
-    public static final String[] PAPERS = {"Vnexpress", "Vietnamnet", "DanTri", "TuoiTre", "NguoiLaoDong","24h.com.vn"};
+    public static final String[] PAPERS = {"Vnexpress", "Dân Trí", "Tuổi Trẻ", "Nguời Lao Động", "24h.com.vn", "Thanh Niên", "Vietnamnet", "Tiền Phong"};
 
-    public static final int[] ICONS = {
-            R.drawable.vne_logo, R.drawable.logo_nvnet,
-            R.drawable.logo_dantri, R.drawable.logo_tuoitre,
-            R.drawable.logo_nld,R.drawable.logo_24h
-    };
+//    public static final int[] ICONS = {
+//            R.drawable.vne_logo, R.drawable.logo_nvnet,
+//            R.drawable.logo_dantri, R.drawable.logo_tuoitre,
+//            R.drawable.logo_nld,R.drawable.logo_24h
+//    };
 
     //public static final int[] ICONS_BAIBAO = {R.drawable.icon_bai_bao,R.drawable.icon_bai_bao};
     public static final int[] ICONS_ITEM_VNE = {

@@ -99,6 +99,7 @@ public class ListNewsActivity extends AppCompatActivity {
 //        Log.d("ma", s);
         shareDialog = new ShareDialog(ListNewsActivity.this);
         callbackManager = CallbackManager.Factory.create();
+
         shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
             @Override
             public void onSuccess(Sharer.Result result) {
@@ -151,7 +152,8 @@ public class ListNewsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             // set Tilte
-            setTitle(ListCategory.get(index).getTitle());
+            //setTitle(ListCategory.get(index).getTitle());
+            setTitle(Variables.PAPERS[paper]);
 
             //item selected
             lvCategory.setItemChecked(0, true);
@@ -176,7 +178,9 @@ public class ListNewsActivity extends AppCompatActivity {
                     lvNews.clearTextFilter();
                     drawerLayout.closeDrawer(lvCategory);
                     index = position;
-                    setTitle(ListCategory.get(position).getTitle());
+
+                    //setTitle(ListCategory.get(position).getTitle());
+                    Toast.makeText(ListNewsActivity.this, ListCategory.get(position).getTitle(), Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -215,7 +219,8 @@ public class ListNewsActivity extends AppCompatActivity {
                 int state = (int)drawerView.getTag();
                 if(state == 1) {
                     super.onDrawerClosed(drawerView);
-                    setTitle(ListCategory.get(index).getTitle());
+                    //setTitle(ListCategory.get(index).getTitle());
+                    setTitle(Variables.PAPERS[paper]);
                 }
             }
 
