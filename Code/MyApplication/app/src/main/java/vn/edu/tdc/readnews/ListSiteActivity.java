@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ public class ListSiteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_site_layout);
+
 
         gvList = (GridView) findViewById(R.id.gvList);
 
@@ -85,5 +87,19 @@ public class ListSiteActivity extends AppCompatActivity {
         list.add(website6);
         list.add(website7);
         list.add(website8);
+    }
+
+    private static long back_pressed;
+    @Override
+    public void onBackPressed() {
+        if (back_pressed + 3000 > System.currentTimeMillis()) {
+            finishAffinity();
+        } else {
+            Toast.makeText(getBaseContext(), "Nhấn back thêm lần nữa để thoát",
+                    Toast.LENGTH_SHORT).show();
+            back_pressed = System.currentTimeMillis();
+
+        }
+
     }
 }
