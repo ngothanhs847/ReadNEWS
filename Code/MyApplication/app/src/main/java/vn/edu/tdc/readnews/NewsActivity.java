@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -30,11 +29,8 @@ public class NewsActivity extends AppCompatActivity {
         webView.getSettings().setUseWideViewPort(true);
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         webView.setScrollbarFadingEnabled(false);
-
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setDisplayZoomControls(false);
-        webSettings.setJavaScriptEnabled(true);
+        webView.setWebViewClient(new NeroWebView());
+        //webView.getSettings().setJavaScriptEnabled(true);
 
         dialog = ProgressDialog.show(this, "", "Loading...");
         webView.loadUrl(link);
