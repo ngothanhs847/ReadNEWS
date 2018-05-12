@@ -102,17 +102,17 @@ public class ListNewsActivity extends AppCompatActivity {
         shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
             @Override
             public void onSuccess(Sharer.Result result) {
-
+                Toast.makeText(ListNewsActivity.this, "Chia sẻ bài viết thành công!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancel() {
-
+                Toast.makeText(ListNewsActivity.this, "Hủy chia sẻ bài viết!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException error) {
-
+                Toast.makeText(ListNewsActivity.this, "Chia sẻ bài viết không thành công!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -255,8 +255,9 @@ public class ListNewsActivity extends AppCompatActivity {
 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-        if(!isLoggedIn)
+        if(!isLoggedIn) {
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+        }
         
         if (ShareDialog.canShow(ShareLinkContent.class))
         {
