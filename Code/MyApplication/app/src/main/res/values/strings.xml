@@ -3,4 +3,5 @@
     <string name="drawer_opened">Opened</string>
     <string name="drawer_closed">Closed</string>
     <string name="facebook_app_id">237849590099315</string>
+    <string name="fb_login_protocol_scheme">fb237849590099315</string>
 </resources>

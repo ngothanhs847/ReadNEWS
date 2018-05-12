@@ -26,7 +26,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 
@@ -49,6 +55,7 @@ import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,10 +76,9 @@ public class ListNewsActivity extends AppCompatActivity {
     private SlidingMenuAdapter adapter;
     private ShareDialog shareDialog;
     private ShareLinkContent shareLinkContent;
-    //private CallbackManager callbackManager;
+    private CallbackManager callbackManager;
 
     List<RssItem> listItemRss = new ArrayList<RssItem>();
-    //ArrayList<ItemSlideMenu> ListWeb;
     private List<ItemSlideMenu> ListCategory = new ArrayList<>();
     private int paper = -1;
     private int index = 0;
@@ -87,13 +93,34 @@ public class ListNewsActivity extends AppCompatActivity {
         setContentView(R.layout.list_news_layout);
 
         //anh xa
-        AnhXa();
-        shareDialog = new ShareDialog(ListNewsActivity.this);
-        //callbackManager = CallbackManager.Factory.create();
 
+        AnhXa();
+//        String s = printKeyHash(ListNewsActivity.this);
+//        Log.d("ma", s);
+        shareDialog = new ShareDialog(ListNewsActivity.this);
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+
+        //nhan index trang web
         intent = getIntent();
         paper = intent.getIntExtra("data", 0);
 
+        //quan ly ket noi mang
         ConnectivityManager cm =
                 (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -101,6 +128,7 @@ public class ListNewsActivity extends AppCompatActivity {
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
 
+        //kiem tra ket noi mang
         if (isConnected)
         {
             dialog = ProgressDialog.show(ListNewsActivity.this, "", "Loading...");
@@ -131,6 +159,7 @@ public class ListNewsActivity extends AppCompatActivity {
             // close menu
             drawerLayout.closeDrawer(lvCategory);
 
+            //chon danh muc
             lvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -152,6 +181,7 @@ public class ListNewsActivity extends AppCompatActivity {
             });
 
 
+            //xem bai viet
             lvNews.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -163,6 +193,7 @@ public class ListNewsActivity extends AppCompatActivity {
         }
         else
         {
+            //loi ket noi mang
             String name = "Bạn không có kết nối internet. \n" +
                     "Hãy bật Wifi hoặc 3G để sử dụng!";
             Toast.makeText(this, name, Toast.LENGTH_LONG).show();
@@ -202,11 +233,11 @@ public class ListNewsActivity extends AppCompatActivity {
     }
 
     //result
-//    @Override
-////    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-////        super.onActivityResult(requestCode, resultCode, data);
-////        callbackManager.onActivityResult(requestCode, resultCode, data);
-////    }
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
 
     //context menu
@@ -222,12 +253,17 @@ public class ListNewsActivity extends AppCompatActivity {
 
         AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
 
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+        if(!isLoggedIn)
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+        
         if (ShareDialog.canShow(ShareLinkContent.class))
         {
             shareLinkContent = new ShareLinkContent.Builder()
                     .setContentUrl(Uri.parse(listItemRss.get(adapterContextMenuInfo.position).getLink()))
                     .build();
-            shareDialog.show(shareLinkContent, ShareDialog.Mode.NATIVE);
+            shareDialog.show(shareLinkContent);
         }
 
         return true;
